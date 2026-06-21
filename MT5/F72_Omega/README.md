@@ -19,9 +19,9 @@ Everything else emerges into those three, and every decision (ENTER / HOLD / ADD
 
 | Phase | Scope | Status |
 |---|---|---|
-| **1** | **Skeleton · logging · memory · state containers · risk shell · capital state-machine · execution shell · paper/observer modes · explainability · event architecture** | ✅ **this delivery** |
-| 2 | Curve engine: `f_se`/`f_phys` per timeframe + `gCurve` (compression, convexity, force) | ⏳ next |
-| 3 | Curve tree: recursion, ownership-by-energy, transfer, merge, chain health | ⏳ |
+| **1** | Skeleton · logging · memory · state containers · risk shell · capital state-machine · execution shell · paper/observer modes · explainability · event architecture | ✅ done |
+| **2** | **Curve engine: `f_se`/`f_phys` per timeframe + the fractal stack, compression, convexity, force — replaces placeholder perception** | ✅ **this delivery** |
+| 3 | Curve tree: recursion, ownership-by-energy, transfer, merge, chain health | ⏳ next |
 | 4 | Narrative: story, life score, narrative score, alignment, confidence | ⏳ |
 | 5 | Execution: campaign positions (Origin/Entry/Progression/Terminal), pyramiding, hedge transfer, position health | ⏳ |
 | 6 | Probability clouds, self-observation, capital throttle (Layers 12–14) | ⏳ |
@@ -31,7 +31,7 @@ Phase 1 **compiles and runs today**. Attach in **Observer** mode and it immediat
 
 ---
 
-## Phase 1 files (dependency order — never inverted)
+## Phase 1 + 2 files (dependency order — never inverted)
 
 ```
 F72_Omega/
@@ -45,6 +45,12 @@ F72_Omega/
 ├── CampaignDB.mqh    # immortal campaign persistence (JSON, per-symbol folders)
 ├── Statistics.mqh    # rolling self-observation metrics (hit rate, expectancy, regime drift)
 ├── Memory.mqh        # campaign lifecycle (birth→update→death→persist→learn)
+│   --- Phase 2 (the curve engine = perception) ---
+├── CurveState.mqh    # SCurve (per-TF f_se/f_phys output) + SCurveStack (the fractal organism)
+├── Curve.mqh         # the curve engine: f_se/f_phys lifecycle + fractal stack + canonical gCurve
+├── Force.mqh         # expansion/displacement force (per-curve + stack-weighted)
+├── Compression.mqh   # Layer 5: compression intelligence (can price breathe?)
+├── Convexity.mqh     # curvature maturity
 └── EA.mq5            # the organism: lifecycle, mode switch, perception→state→consequence loop
 ```
 
@@ -97,24 +103,24 @@ The agreed home for every F72 OMEGA layer. ✅ = implemented in Phase 1, ⏳ = s
 
 | Layer | Concept | Module · function | Status |
 |---|---|---|---|
-| 0 | Universe (everything is curves) | `Curve.mqh` | ⏳ P2 |
+| 0 | Universe (everything is curves) | `Curve.mqh::Compute` → `SCurve` | ✅ P2 |
 | 1 | Market as organism | architecture-wide | ✅ (frame) |
 | 2 | Immortal memory | `CampaignDB::Save/Load` · `Memory::Birth/Update/Death` | ✅ |
 | 3 | Narrative engine | `Story.mqh::Vote()` | ⏳ P4 |
-| 4 | Fractal consciousness | `Curve` per-TF + `Alignment.mqh::Score()` | ⏳ P2/P4 |
-| 5 | Compression intelligence | `Compression.mqh::Track()` → `state.compression` | ⏳ P2 |
-| 6 | Structural abandonment | `LifeScore.mqh::Abandonment()` → `state.abandonment` | ⏳ P4 |
-| 7 | Continuation intelligence | `PositionHealth.mqh::Continuation()` → `state.continuation` | ⏳ P5 |
+| 4 | Fractal consciousness | `Curve::ComputeStack` → `SCurveStack` + alignment | ✅ P2 |
+| 5 | Compression intelligence | `Compression::Score` → `state.compression` | ✅ P2 |
+| 6 | Structural abandonment | `EA::BuildPerception` (curve extended/extreme) → `state.abandonment` | ✅ P2 (refined P4) |
+| 7 | Continuation intelligence | `EA::BuildPerception` (force/align/support/phase) → `state.continuation` | ✅ P2 (refined P5) |
 | 8 | Sequence intelligence | `ChainHealth.mqh::Sequence()` | ⏳ P3 |
 | 9 | Meta-chain / regime | `ChainHealth.mqh::Regime()` → `state.regimeScore` | ⏳ P3 (Python sidecar for true cross-session) |
-| 10 | Participant engine | `Participants` (fib/liquidity/FU) | ⏳ P2 |
+| 10 | Participant engine | `Participants` (fib/liquidity/FU) | ⏳ P2.5/P3 |
 | 11 | Terminal intelligence | `Transfer.mqh::TerminalInduction()` | ⏳ P3 |
-| 12 | Probability clouds | `EA::BuildPerception` → `pContinuation/pTerminal/pTransfer` | ✅ (placeholder feed) |
+| 12 | Probability clouds | `EA::BuildPerception` → `pContinuation/pTerminal/pTransfer` | ✅ (curve-driven) |
 | 13 | Capital intelligence | `Risk::TierRiskPct/EffectiveRiskPct` + `Capital::Throttle` | ✅ |
 | 14 | Self-observation | `EA::ComputeSelfObservation` + `Statistics` → `storyConfidence` | ✅ |
 | 15 | Continuous awareness | `EA::BuildPerception → trinity → Decide → Act` | ✅ (frame; perception is placeholder until P2) |
 
-The **only** function Phase 2 replaces is `EA::BuildPerception()` — the real multi-TF curve engine plugs in there. Everything downstream (trinity → risk → capital → execution → memory → explainability) is already final.
+The **only** function Phase 2 replaced is `EA::BuildPerception()` — it now runs the real multi-TF curve engine. Everything downstream (trinity → risk → capital → execution → memory → explainability) is unchanged from Phase 1. Phase 3 plugs ownership/chain into the same state container.
 
 ---
 
